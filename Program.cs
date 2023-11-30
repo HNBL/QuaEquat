@@ -7,79 +7,91 @@ class Program
 {
 
 
-    public static double QuaEquat(double a, double b, double c, ref double x1, ref double x2)
+    public static (int flag, double x1, double x2)  QuaEquat(double a, double b, double c)
     {
 
         double d = b * b - 4 * a * c;
+        (int flag, double x1, double x2) result;
+       result = (0, 0, 0);
 
-        if (d < 0)
-        {
-            return -1;
-
-        }
 
         if (d == 0)
         {
-            x1 = -c / b;
-            x2 = x1;
-            return 0;
+            result.x1 = -b/(2 * a);
+            result.flag = 0;
+        }
+        else
+        {
+            result.flag = -1;
         }
 
         if (d > 0)
         {
-            d = Math.Sqrt(d);
-            x1 = (-b + d) / (2 * a);
-            x2 = (-b - d) / (2 * a);
+            result.x1 = (-b + Math.Sqrt(d)) / (2 * a);
+            result.x2 = (-b - Math.Sqrt(d)) / (2 * a);
+            result.flag = 1;
 
-            if ((-b + d) / (2 * a) == (-b - d) / (2 * a))
-            {
-                x1 = x2;
-                return 1;
-            }
-            return 1;
 
         }
 
-        return 0;
+
+        return result;
 
     }
 
 
     static void Main(string[] args)
     {
-        Console.WriteLine("Решение уравнения типа A×x2 + B×x + C = 0 ");
 
         double a, b, c;
-        Console.WriteLine("a =");
-        a = Convert.ToDouble(Console.ReadLine());
 
-        Console.WriteLine("b =");
-        b = Convert.ToDouble(Console.ReadLine());
-
-        Console.WriteLine("c =");
-        c = Convert.ToDouble(Console.ReadLine());
-
-
-        double x1 = 0;
-
-        double x2 = 0;
-
-
-        QuaEquat(a, b, c, ref x1, ref x2);
-
-
-        switch (QuaEquat(a, b, c, ref x1, ref x2))
+        try
         {
-            case 0:
-                Console.WriteLine("Корней уравнения с коэффициентами a = {0}, b = {1}, c = {2} один x1=x2={3}", a, b, c, x1);
-                break;
-            case 1:
-                Console.WriteLine("Корней уравнения с коэффициентами a = {0}, b = {1}, c = {2}  равны x1={3: 0.0} , x2 = {4: 0.0}", a, b, c, x1, x2);
-                break;
-            case -1:
-                Console.WriteLine("Корней уравнения с коэффициентами a = {0}, b = {1}, c = {2} нет.", a, b, c);
-                break;
+
+            Console.WriteLine("Решение уравнения типа A×x2 + B×x + C = 0 ");
+
+            Console.WriteLine("a =");
+            a = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("b =");
+            b = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("c =");
+            c = double.Parse(Console.ReadLine());
+
+
+            var result = QuaEquat(a, b, c);
+
+            switch (result.flag)
+            {
+
+                case 0:
+                    Console.WriteLine("Корней уравнения с коэффициентами a = {0}, b = {1}, c = {2} один x1=x2={3}", a, b, c, Convert.ToString(result.x1));
+                    break;
+                case 1:
+                    Console.WriteLine("Корней уравнения с коэффициентами a = {0}, b = {1}, c = {2}  равны x1={3: 0.0} , x2 = {4: 0.0}", a, b, c, Convert.ToString(result.x1), Convert.ToString(result.x2));
+                    break;
+                case -1:
+                    Console.WriteLine("Корней уравнения с коэффициентами a = {0}, b = {1}, c = {2} нет.", a, b, c);
+                    break;
+                default:
+                    Console.WriteLine("Ошибка расчета");
+                    break;
+
+            }
+
+
         }
+
+
+        catch
+        {
+            Console.WriteLine("Ошибка ");
+        }
+
+
+
+
     }
 
 }
